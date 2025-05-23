@@ -1,0 +1,164 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
+<!--    <title>Admin</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>-->
+<!--</head>-->
+<!--<body class="bg-light">-->
+<!--<h1> Active balance : {{ active_balance }}</h1>-->
+<!--<h2>Mlimani Chart</h2>-->
+<!--                {{ chart_div|safe }}-->
+<!--<h2>Kings Chart</h2>-->
+<!--                {{ chart_div_kings|safe }}-->
+
+<!--<div class="container mt-5">-->
+<!--    <div class="card shadow-sm rounded-4">-->
+<!--        <div class="card-body">-->
+
+<!--            <h4 class="card-title text-center mb-4">Admin Dashboard</h4>-->
+
+
+<!--            <form method="POST">-->
+<!--                {{ form.hidden_tag() }}-->
+
+<!--                <div class="mb-3">-->
+<!--                    {{ form.expenditure.label(class="form-label") }}-->
+<!--                    {{ form.expenditure(class="form-control", placeholder="") }}-->
+<!--                    {% for error in form.expenditure.errors %}-->
+<!--                        <div class="text-danger">{{ error }}</div>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+
+<!--                <div class="mb-3">-->
+<!--                    {{ form.to_im.label(class="form-label") }}-->
+<!--                    {{ form.to_im(class="form-control", placeholder="") }}-->
+<!--                    {% for error in form.to_im.errors %}-->
+<!--                        <div class="text-danger">{{ error }}</div>-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+
+<!--                <div class="d-grid">-->
+<!--                    {{ form.submit(class="btn btn-primary btn-lg") }}-->
+<!--                </div>-->
+<!--            </form>-->
+<!--            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center py-2">-->
+<!--                <a href="{{url_for('home')}}" class="btn btn-primary btn-lg px-4 gap-3">Logout</a>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .chart-container {
+            min-height: 450px;
+            margin-bottom: 2rem;
+        }
+        .balance-card {
+            background: linear-gradient(to right, #4e73df, #224abe);
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .balance-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .section-title {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            color: #333;
+        }
+        .admin-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid py-4 px-4">
+        <!-- Balance Display -->
+        <div class="balance-card">
+            <h5 class="mb-2">Active Balance</h5>
+            <div class="balance-value">{{ active_balance }}</div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Mlimani Chart</h2>
+                <div class="chart-container bg-white p-3 rounded-3 shadow-sm">
+                    {{ chart_div|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Kings Chart</h2>
+                <div class="chart-container bg-white p-3 rounded-3 shadow-sm">
+                    {{ chart_div_kings|safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Form -->
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <div class="admin-form">
+                    <h4 class="text-center mb-4">Admin Controls</h4>
+
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-4">
+                            {{ form.expenditure.label(class="form-label fw-bold") }}
+                            {{ form.expenditure(class="form-control form-control-lg", placeholder="") }}
+                            {% for error in form.expenditure.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.to_im.label(class="form-label fw-bold") }}
+                            {{ form.to_im(class="form-control form-control-lg", placeholder="") }}
+                            {% for error in form.to_im.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg py-2") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Resize charts when the window resizes for better responsiveness
+        window.addEventListener('resize', function() {
+            Plotly.Plots.resize(document.querySelectorAll('.chart-container > div'));
+        });
+    </script>
+</body>
+</html>

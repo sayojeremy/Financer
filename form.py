@@ -1,18 +1,21 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField ,IntegerField, DateField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length,NumberRange
+from wtforms.validators import DataRequired
 
 # form for personal money in
 class InForm(FlaskForm):
-    source = StringField("Source of funds", validators=[DataRequired()])
-    amount = StringField("Amount", validators=[DataRequired()])
-    date = DateField("Date Received", validators=[DataRequired()])
+    expense = IntegerField("Expenditure", validators=[DataRequired()])
+    tcash = IntegerField("Total cash", validators=[DataRequired()])
+    paybill = IntegerField("Paybill", validators=[DataRequired()])
     submit = SubmitField("Okay!")
 
-# form for personal money out
-class OutForm(FlaskForm):
-    expense = StringField("Expense", validators=[DataRequired()])
-    amount = StringField("Amount", validators=[DataRequired()])
-    date = DateField("Date Spent", validators=[DataRequired()])
-    notes= StringField("Further Notes", validators=[DataRequired()])
+class Admin(FlaskForm):
+    expenditure = IntegerField("Expenditure")
+    to_im = IntegerField("Transfer to I&M")
     submit = SubmitField("Okay!")
+
+# Create a form to login existing users
+class LoginForm(FlaskForm):
+    phone_no = StringField("Phone Number", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Let Me In!")
