@@ -314,4 +314,4 @@ def admin():
                        chart_div_kings=chart_div_kings, active_balance=active_balance)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
