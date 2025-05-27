@@ -12,7 +12,7 @@ class InForm(FlaskForm):
 class Admin(FlaskForm):
     expenditure = IntegerField("Expenditure")
     to_im = IntegerField("Transfer to I&M")
-    submit = SubmitField("Okay!")
+    submit = SubmitField("Go to Dashboard")
 
 # Create a form to login existing users
 class LoginForm(FlaskForm):
