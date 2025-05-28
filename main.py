@@ -73,8 +73,6 @@ with app.app_context():
 mlimani_phone_no = os.getenv("mlimani_phone_no")
 mlimani_password = os.getenv("mlimani_password")
 
-print(mlimani_phone_no)
-print(mlimani_password)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -90,7 +88,7 @@ def login():
         admin_password = os.getenv("admin_password")
         print(mlimani_phone_no)
         print(mlimani_password)
-        if phone_no == mlimani_phone_no and password == mlimani_password:
+        if phone_no == "0768178935" and password == "mlimani":
             return redirect(url_for("mlimani"))
         elif phone_no == kings_phone_no and password == kings_password:
             return redirect(url_for("kings"))
