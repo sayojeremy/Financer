@@ -70,6 +70,11 @@ class Balance(db.Model):
 with app.app_context():
     db.create_all()
 
+mlimani_phone_no = os.getenv("mlimani_phone_no")
+mlimani_password = os.getenv("mlimani_password")
+
+print(mlimani_phone_no)
+print(mlimani_password)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
