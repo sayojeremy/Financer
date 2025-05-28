@@ -70,8 +70,6 @@ class Balance(db.Model):
 with app.app_context():
     db.create_all()
 
-mlimani_phone_no = os.getenv("mlimani_phone_no")
-mlimani_password = os.getenv("mlimani_password")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -90,9 +88,9 @@ def login():
         print(mlimani_password)
         if phone_no == "0768178935" and password == "mlimani":
             return redirect(url_for("mlimani"))
-        elif phone_no == kings_phone_no and password == kings_password:
+        elif phone_no == "0768178935" and password == "kings":
             return redirect(url_for("kings"))
-        elif phone_no == admin_phone_no and password == admin_password:
+        elif phone_no == "0768178935" and password == "admin":
             return redirect(url_for("admin_form"))
         else:
             flash("Invalid login details!", "danger")
