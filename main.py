@@ -24,12 +24,12 @@ class Base(DeclarativeBase):
 
 # initializing flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv("secret_key")
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app, model_class=Base)
 
-print("SECRET_KEY:", os.environ.get('secret_key'))
+print("SECRET_KEY:", os.environ.get('SECRET_KEY'))
 
 
 
