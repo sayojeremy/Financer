@@ -83,6 +83,8 @@ def login():
         kings_password = os.getenv("kings_password")
         admin_phone_no = os.getenv("admin_phone_no")
         admin_password = os.getenv("admin_password")
+        print(mlimani_phone_no)
+        print(mlimani_password)
         if phone_no == mlimani_phone_no and password == mlimani_password:
             return redirect(url_for("mlimani"))
         elif phone_no == kings_phone_no and password == kings_password:
