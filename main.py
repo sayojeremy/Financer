@@ -29,6 +29,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app, model_class=Base)
 
+print("SECRET_KEY:", os.environ.get('secret_key'))
+
 
 
 # class defination
