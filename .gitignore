@@ -7,7 +7,7 @@ __pycache__/
 *.so
 .venv
 .idea
-.env
+
 
 # Distribution / packaging
 .Python
