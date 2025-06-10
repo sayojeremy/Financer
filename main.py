@@ -184,7 +184,7 @@ def admin():
     #step 1: Get today and yesterday as time deltas
     today = date.today()
 
-    yesterday = today - timedelta(days=1)
+    yesterday = today - timedelta(days=0)
 
 
     #step 2: Get mlimani records for today and yaesterday. mlimani_today cash is the cash collected per day
