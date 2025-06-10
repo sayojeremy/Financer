@@ -11,6 +11,7 @@ import plotly.offline as pyo
 from sqlalchemy.exc import IntegrityError
 import os
 from dotenv import load_dotenv
+import psycopg2
 load_dotenv()
 
 # defining database file path
@@ -24,10 +25,10 @@ class Base(DeclarativeBase):
 # initializing flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:vBJTNEeGerKAJfORSERlIRPidFRapevw@postgres.railway.internal:5432/railway"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app, model_class=Base)
-
+print(os.getenv("DATABASE_URL"))
 
 
 
