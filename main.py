@@ -68,8 +68,8 @@ class Balance(db.Model):
     active_balance: Mapped[int] = mapped_column(Integer, nullable=False)
     date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 
