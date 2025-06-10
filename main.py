@@ -1,11 +1,10 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from form import InForm, Admin, LoginForm
-import requests
 from datetime import date, timedelta
 import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import Integer, String, Float, Date, func, Text, DateTime
+from sqlalchemy import Integer,  Date
 from sqlalchemy.orm import Mapped, mapped_column
 import plotly.graph_objs as go
 import plotly.offline as pyo
@@ -25,11 +24,11 @@ class Base(DeclarativeBase):
 # initializing flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app, model_class=Base)
 
-print("SECRET_KEY:", os.environ.get('SECRET_KEY'))
+
 
 
 
@@ -39,7 +38,7 @@ class Mlimani(db.Model):
     expense: Mapped[int] = mapped_column(Integer, nullable=False)
     tcash: Mapped[int] = mapped_column(Integer, nullable=False)
     paybill: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique= True)
+    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
 
 class Kings(db.Model):
@@ -50,22 +49,23 @@ class Kings(db.Model):
     date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
 
+
 class Administrator(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     expenditure: Mapped[int] = mapped_column(Integer, nullable=False)
     to_im: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique = True)
+    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
 class Today(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     mlimani_today_cash: Mapped[int] = mapped_column(Integer, nullable=False)
     kings_today_cash: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique= True)
+    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
 class Balance(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     active_balance: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique= True)
+    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
 
 with app.app_context():
     db.create_all()
@@ -110,10 +110,12 @@ def mlimani():
         tcash = form.tcash.data
         paybill = form.paybill.data
 
+
         new_submission = Mlimani(
             expense=expense,
             tcash=tcash,
-            paybill=paybill
+            paybill=paybill,
+
         )
         try:
             db.session.add(new_submission)
@@ -137,7 +139,8 @@ def kings():
         new_submission = Kings(
             expense=expense,
             tcash=tcash,
-            paybill=paybill
+            paybill=paybill,
+
         )
         try:
             db.session.add(new_submission)
