@@ -206,7 +206,7 @@ def admin():
 
     #TODO- delete the code above in production
 
-    yesterday = today - timedelta(days=0)
+    yesterday = today - timedelta(days=1)
 
 
     #step 2: Get mlimani records for today and yaesterday. mlimani_today cash is the cash collected per day
