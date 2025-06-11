@@ -68,9 +68,9 @@ class Balance(db.Model):
     active_balance: Mapped[int] = mapped_column(Integer, nullable=False)
     day: Mapped[date] = mapped_column(Date,nullable=False, unique =True)
 
-with app.app_context():
-    db.drop_all()
-    db.create_all()
+# with app.app_context():
+#     db.drop_all()
+#     db.create_all()
 
 
 
@@ -202,6 +202,7 @@ def admin():
         today = admin_entry.day  # Use this as "today" in your logic
     else:
         today = date.today()  # Fallback if there's no data
+    print(today)
 
     #TODO- delete the code above in production
 
@@ -297,7 +298,7 @@ def admin():
     mlimani = db.session.execute(db.select(Mlimani)).scalars().all()
 
     for record in mlimani:
-        mdates.append(record.date)
+        mdates.append(record.day)
         mexpenditure.append(record.expense)
         mpaybill.append(record.paybill)
 
@@ -323,7 +324,7 @@ def admin():
     kings = db.session.execute(db.select(Kings)).scalars().all()
 
     for record in kings:
-        kdates.append(record.date)
+        kdates.append(record.day)
         kexpenditure.append(record.expense)
         kpaybill.append(record.paybill)
 
