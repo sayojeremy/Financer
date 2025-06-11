@@ -7,11 +7,13 @@ class InForm(FlaskForm):
     expense = IntegerField("Expenditure", validators=[DataRequired()])
     tcash = IntegerField("Total cash", validators=[DataRequired()])
     paybill = IntegerField("Paybill", validators=[DataRequired()])
+    date= DateField("Date", validators= [DataRequired()])
     submit = SubmitField("Okay!")
 
 class Admin(FlaskForm):
     expenditure = IntegerField("Expenditure")
     to_im = IntegerField("Transfer to I&M")
+    date = DateField("Date", validators=[DataRequired()])
     submit = SubmitField("Go to Dashboard")
 
 # Create a form to login existing users

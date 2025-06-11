@@ -51,6 +51,14 @@
                     {% endfor %}
                 </div>
 
+                <div class="mb-4">
+                    {{ form.date.label(class="form-label fw-bold") }}
+                    {{ form.date(class="form-control form-control-lg", placeholder="") }}
+                    {% for error in form.date.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
                 <div class="d-grid">
                     {{ form.submit(class="btn btn-primary btn-lg py-2") }}
                 </div>
@@ -58,5 +66,6 @@
 
         </div>
     </div>
+</div>
 </body>
 </html>

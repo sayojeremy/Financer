@@ -39,7 +39,7 @@ class Mlimani(db.Model):
     expense: Mapped[int] = mapped_column(Integer, nullable=False)
     tcash: Mapped[int] = mapped_column(Integer, nullable=False)
     paybill: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
+    day: Mapped[date] = mapped_column(Date, nullable=False, unique =True)
 
 
 class Kings(db.Model):
@@ -47,7 +47,7 @@ class Kings(db.Model):
     expense: Mapped[int] = mapped_column(Integer, nullable=False)
     tcash: Mapped[int] = mapped_column(Integer, nullable=False)
     paybill: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
+    day: Mapped[date] = mapped_column(Date, nullable=False, unique =True)
 
 
 
@@ -55,21 +55,22 @@ class Administrator(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     expenditure: Mapped[int] = mapped_column(Integer, nullable=False)
     to_im: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
+    day: Mapped[date] = mapped_column(Date, nullable=False, unique =True)
 
 class Today(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     mlimani_today_cash: Mapped[int] = mapped_column(Integer, nullable=False)
     kings_today_cash: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
+    day: Mapped[date] = mapped_column(Date, nullable=False, unique =True)
 
 class Balance(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     active_balance: Mapped[int] = mapped_column(Integer, nullable=False)
-    date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False, unique =True)
+    day: Mapped[date] = mapped_column(Date,nullable=False, unique =True)
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 
 
@@ -110,12 +111,14 @@ def mlimani():
         expense = form.expense.data
         tcash = form.tcash.data
         paybill = form.paybill.data
+        day= form.date.data
 
 
         new_submission = Mlimani(
             expense=expense,
             tcash=tcash,
             paybill=paybill,
+            day= day
 
         )
         try:
@@ -136,11 +139,13 @@ def kings():
         expense = form.expense.data
         tcash = form.tcash.data
         paybill = form.paybill.data
+        day= form.date.data
 
         new_submission = Kings(
             expense=expense,
             tcash=tcash,
             paybill=paybill,
+            day= day
 
         )
         try:
@@ -159,10 +164,12 @@ def admin_form():
     if form.validate_on_submit():
         expenditure = form.expenditure.data
         to_im = form.to_im.data
+        day= form.date.data
 
         new_submission = Administrator(
             expenditure=expenditure,
-            to_im=to_im
+            to_im=to_im,
+            day= day
         )
         try:
             db.session.add(new_submission)
@@ -181,10 +188,24 @@ def admin():
     """Data entered is total cash cumulative from sunday. Cash per day is the difference between yesterday's and 
     today's cash reset on every sunday"""
 
-    #step 1: Get today and yesterday as time deltas
-    today = date.today()
+    # #step 1: Get today and yesterday as time deltas
+    # today = date.today()
 
-    yesterday = today - timedelta(days=0)
+    """ For testing purposes todays date will be the data passed in by the user"""
+    #TODO -Delete the logic below in production an uncomment the one above
+    # Get the most recent date in the Administrator table
+    admin_entry = db.session.execute(
+        db.select(Administrator).order_by(Administrator.date.desc())
+    ).scalar()
+
+    if admin_entry:
+        today = admin_entry.date  # Use this as "today" in your logic
+    else:
+        today = date.today()  # Fallback if there's no data
+
+    #TODO- delete the code above in production
+
+    yesterday = today - timedelta(days=1)
 
 
     #step 2: Get mlimani records for today and yaesterday. mlimani_today cash is the cash collected per day
@@ -229,7 +250,8 @@ def admin():
     if not existing:
         new_today= Today(
             mlimani_today_cash = mlimani_today_cash,
-            kings_today_cash = kings_today_cash
+            kings_today_cash = kings_today_cash,
+            day= today
         )
         db.session.add(new_today)
         db.session.commit()
@@ -254,7 +276,8 @@ def admin():
     today_sales = (mlimani_today_cash + mlimani_paybill + kings_today_cash + kings_paybill)
     active_balance = (previous_balance_amount + today_sales) - admin_expenditure
     new_balance= Balance(
-        active_balance= active_balance
+        active_balance= active_balance,
+        day= today
     )
     db.session.add(new_balance)
     db.session.commit()
