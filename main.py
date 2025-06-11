@@ -195,28 +195,28 @@ def admin():
     #TODO -Delete the logic below in production an uncomment the one above
     # Get the most recent date in the Administrator table
     admin_entry = db.session.execute(
-        db.select(Administrator).order_by(Administrator.date.desc())
+        db.select(Administrator).order_by(Administrator.day.desc())
     ).scalar()
 
     if admin_entry:
-        today = admin_entry.date  # Use this as "today" in your logic
+        today = admin_entry.day  # Use this as "today" in your logic
     else:
         today = date.today()  # Fallback if there's no data
 
     #TODO- delete the code above in production
 
-    yesterday = today - timedelta(days=1)
+    yesterday = today - timedelta(days=0)
 
 
     #step 2: Get mlimani records for today and yaesterday. mlimani_today cash is the cash collected per day
     """Mlimani today records"""
-    mlimani_today = db.session.execute(db.select(Mlimani).where(Mlimani.date == today)).scalars().all()
+    mlimani_today = db.session.execute(db.select(Mlimani).where(Mlimani.day == today)).scalars().all()
     for record in mlimani_today:
         mlimani_total_cash = record.tcash
         mlimani_paybill = record.paybill
 
     """Mlimani yesterday records"""
-    mlimani_yesterday = db.session.execute(db.select(Mlimani).where(Mlimani.date == yesterday)).scalars().all()
+    mlimani_yesterday = db.session.execute(db.select(Mlimani).where(Mlimani.day == yesterday)).scalars().all()
     for record in mlimani_yesterday:
         mlimani_total_cash_yesterday = record.tcash
 
@@ -230,13 +230,13 @@ def admin():
 
     #step 3- Get kings records for today and yesterday. Kings_today_cash is the cash collected for the day
     """Kings cash today"""
-    kings_today = db.session.execute(db.select(Kings).where(Kings.date == today)).scalars().all()
+    kings_today = db.session.execute(db.select(Kings).where(Kings.day == today)).scalars().all()
     for record in kings_today:
         kings_total_cash = record.tcash
         kings_paybill = record.paybill
 
     """Kings cash yesterday"""
-    kings_yesterday = db.session.execute(db.select(Mlimani).where(Kings.date == yesterday)).scalars().all()
+    kings_yesterday = db.session.execute(db.select(Mlimani).where(Kings.day == yesterday)).scalars().all()
     for record in kings_yesterday:
         kings_total_cash_yesterday = record.tcash
 
@@ -246,7 +246,7 @@ def admin():
         kings_today_cash = kings_total_cash - kings_total_cash_yesterday
 
     # step 4: commiting the calculated values into a database
-    existing = db.session.execute(db.select(Today).where(Today.date == today)).scalars().first()
+    existing = db.session.execute(db.select(Today).where(Today.day == today)).scalars().first()
     if not existing:
         new_today= Today(
             mlimani_today_cash = mlimani_today_cash,
@@ -256,7 +256,7 @@ def admin():
         db.session.add(new_today)
         db.session.commit()
 
-    admin_today = db.session.execute(db.select(Administrator).where(Administrator.date == today)).scalars().all()
+    admin_today = db.session.execute(db.select(Administrator).where(Administrator.day == today)).scalars().all()
     for record in admin_today:
         admin_expenditure = record.expenditure
 
@@ -264,7 +264,7 @@ def admin():
     """calculation of active balance"""
     # Example: fetching last known balance
     previous_balance = db.session.execute(
-        db.select(Balance).order_by(Balance.date.desc())
+        db.select(Balance).order_by(Balance.day.desc())
     ).scalar()
 
     if not previous_balance:
